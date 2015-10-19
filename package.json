@@ -1,0 +1,26 @@
+{
+  "name": "high-anonymous-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/derekhe-crawlers/high-anonymous-proxy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/derekhe-crawlers/high-anonymous-proxy/issues"
+  },
+  "homepage": "https://github.com/derekhe-crawlers/high-anonymous-proxy",
+  "dependencies": {
+    "async": "^1.4.2",
+    "fs-extra": "^0.24.0",
+    "lodash": "^3.10.1",
+    "request": "^2.65.0",
+    "socks5-http-client": "^1.0.1"
+  }
+}
