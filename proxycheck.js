@@ -1,11 +1,12 @@
+
 /**
  * Created by sche on 10/19/15.
  */
 
+var _ = require("lodash");
 var proxies = require("./out/proxy.json");
 var async = require("async");
 var request = require("request");
-var _ = require("lodash");
 var fs = require("fs-extra");
 
 var url = "http://www.qunar.com";
@@ -27,11 +28,8 @@ var q = async.queue(function (proxy, callback) {
         var isvalid = check(body);
         if (isvalid) {
             var time = parseInt(res.elapsedTime / 1000);
-            console.log(proxy, " VALID " + time);
+            console.log(time, proxy);
             valid.push({proxy: proxy, time: time});
-        }
-        else{
-            console.log(proxy, " NOT VALID ", error);
         }
 
         process.nextTick(callback);
@@ -45,8 +43,12 @@ q.drain = function () {
         return v.time < 5;
     });
 
-    fs.writeFileSync("./out/valid.json", JSON.stringify(sorted, null, 2));
-    console.log(valid.length);
+    var results = _.map(sorted, function(s){
+        return s.proxy;
+    });
+
+    fs.writeFileSync("./out/valid.json", JSON.stringify(results, null, 2));
+    console.log(results.length);
     console.log("done");
 };
 
