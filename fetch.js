@@ -104,9 +104,31 @@ function pachong_org(callback) {
         });
 }
 
+function gatherproxy(callback, args) {
+    var url = "http://www.gatherproxy.com/proxylist/country/";
+    var options = getUrl(url);
+    options.method = "POST";
+    options.form = {
+        "Filter": "elite",
+        "Uptime": "70",
+        "Country": "China",
+        "PageIdx": args
+    };
+
+    request(options, function (err, res, body) {
+        var re = /write\('(\d+\.\d+\.\d+\.\d+)'\)<\/script><\/td>\s*(.*?)dep\('(\d+)'/gm;
+        regexMatch(re, body, function (m) {
+            var ip = m[1] + ":" + parseInt(m[3], 16);
+            proxy.push(ip);
+        });
+
+        callback(url);
+    })
+}
+
 var q = async.queue(function (task, callback) {
     task.f(callback, task.args);
-}, 10);
+}, 30);
 
 var tasks = [];
 var tasks = [{f: proxy_com_ru}, {f: pachong_org}, {f: cn_proxy}];
@@ -117,6 +139,10 @@ for (var page = 1; page <= 5; page++) {
 
 for (var page = 1; page <= 10; page++) {
     tasks.push({f: kuai_daili, args: page});
+}
+
+for (var page = 1; page <= 50; page++) {
+    tasks.push({f: gatherproxy, args: page});
 }
 
 q.push(tasks, function (url) {

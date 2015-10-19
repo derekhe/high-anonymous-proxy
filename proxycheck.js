@@ -21,18 +21,22 @@ var q = async.queue(function (proxy, callback) {
     request({
         url: url,
         proxy: "http://" + proxy,
-        timeout: 5 * 1000
+        timeout: 10 * 1000,
+        time: true
     }, function (error, res, body) {
         var isvalid = check(body);
         if (isvalid) {
-            var time = parseInt((new Date() - t) / 1000);
-            console.log(proxy, " is valid " + time);
+            var time = parseInt(res.elapsedTime / 1000);
+            console.log(proxy, " VALID " + time);
             valid.push({proxy: proxy, time: time});
+        }
+        else{
+            console.log(proxy, " NOT VALID ", error);
         }
 
         process.nextTick(callback);
     })
-}, 50);
+}, 100);
 
 q.drain = function () {
     var sorted = _.filter(_.sortBy(valid, function (v) {
@@ -46,8 +50,8 @@ q.drain = function () {
     console.log("done");
 };
 
+console.log(proxies.length);
 _.each(proxies, function (proxy) {
     q.push(proxy, function () {
-
     });
 })
