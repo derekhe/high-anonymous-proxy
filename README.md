@@ -1,5 +1,9 @@
 匿名代理采集
 ==================
+我实在太懒了。。。。
+传送门，每小时更新
+https://jsonblob.com/api/jsonBlob/56258f3fe4b01190df3c4a0a
+
 用法
 
 首先设置本地能够翻墙的socks5 proxy，代码中默认为localhost:7070，请根据自己的需要修改
