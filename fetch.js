@@ -15,7 +15,8 @@ function getUrl(url) {
         agentOptions: {
             socksHost: 'localhost',
             socksPort: 7070
-        }
+        },
+        timeout: 20 * 1000
     }
 }
 
