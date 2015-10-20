@@ -123,7 +123,7 @@ function gatherproxy(callback, args) {
             proxy.push(ip);
         });
 
-        callback(url);
+        callback(url + " " + args);
     })
 }
 
@@ -147,7 +147,7 @@ for (var page = 1; page <= 50; page++) {
 }
 
 q.push(tasks, function (url) {
-    console.log(url);
+    console.log("Finished ", url, " remaining ", q.length());
 });
 
 q.drain = function () {
