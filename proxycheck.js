@@ -47,9 +47,12 @@ q.drain = function () {
         return s.proxy;
     });
 
+    results = _.uniq(results);
+
     fs.writeFileSync("./out/valid.json", JSON.stringify(results, null, 2));
     console.log(results.length);
     console.log("done");
+    process.exit();
 };
 
 console.log(proxies.length);

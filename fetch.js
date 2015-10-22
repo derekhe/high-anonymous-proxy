@@ -20,6 +20,13 @@ function getUrl(url) {
     }
 }
 
+function finish(callback, args) {
+    process.nextTick(function () {
+        callback(args);
+    });
+}
+
+
 function proxy_com_ru(callback) {
     var url = "http://www.proxy.com.ru/gaoni/";
     request(getUrl(url)
@@ -30,7 +37,7 @@ function proxy_com_ru(callback) {
                 proxy.push(m[2] + ":" + m[3]);
             });
 
-            callback(url);
+            finish(callback, url);
         });
 }
 
@@ -44,7 +51,7 @@ function cn_proxy(callback) {
                 proxy.push(m[1] + ":" + m[2]);
             });
 
-            callback(url);
+            finish(callback, url);
         });
 }
 
@@ -58,7 +65,7 @@ function getproxy_ip(callback, args) {
                 proxy.push(m[1])
             });
 
-            callback(url);
+            finish(callback, url);
         });
 }
 
@@ -81,7 +88,8 @@ function kuai_daili(callback, args) {
             regexMatch(re, body, function (m) {
                 proxy.push(m[1] + ":" + m[2])
             });
-            callback(url);
+
+            finish(callback, url);
         });
 }
 
@@ -101,7 +109,8 @@ function pachong_org(callback) {
                 var port = eval(script + ";" + m[2]);
                 proxy.push(m[1] + ":" + port);
             });
-            callback(url);
+
+            finish(callback, url);
         });
 }
 
@@ -123,7 +132,7 @@ function gatherproxy(callback, args) {
             proxy.push(ip);
         });
 
-        callback(url + " " + args);
+        finish(callback, url + " " + args);
     })
 }
 
