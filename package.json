@@ -1,14 +1,14 @@
 {
   "name": "high-anonymous-proxy",
   "version": "1.0.0",
-  "description": "",
+  "description": "匿名代理采集 ================== 我实在太懒了。。。。 传送门，每小时更新 https://jsonblob.com/api/jsonBlob/56258f3fe4b01190df3c4a0a",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/derekhe-crawlers/high-anonymous-proxy.git"
+    "url": "git+https://github.com/derekhe-crawlers/high-anonymous-proxy.git"
   },
   "author": "",
   "license": "ISC",
@@ -22,5 +22,9 @@
     "lodash": "^3.10.1",
     "request": "^2.65.0",
     "socks5-http-client": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13"
   }
 }
