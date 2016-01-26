@@ -18,6 +18,7 @@
   "homepage": "https://github.com/derekhe-crawlers/high-anonymous-proxy",
   "dependencies": {
     "async": "^1.4.2",
+    "express": "^4.13.4",
     "fs-extra": "^0.24.0",
     "lodash": "^3.10.1",
     "request": "^2.65.0",

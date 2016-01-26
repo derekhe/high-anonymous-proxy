@@ -9,7 +9,7 @@ require("babel-core").transform("code");
     var log4js = require('log4js');
     var logger = log4js.getLogger();
 
-    function validate(proxies) {
+    function check(proxies) {
         return new Promise((resolve, reject)=> {
             var url = "http://www.qunar.com";
             var check = function (html) {
@@ -64,6 +64,6 @@ require("babel-core").transform("code");
     };
 
     module.exports = {
-        validate: validate
+        check: check
     }
 })();
