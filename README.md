@@ -1,26 +1,31 @@
 匿名代理采集
 ==================
-我实在太懒了。。。。
-传送门，每小时更新
-https://jsonblob.com/api/jsonBlob/56258f3fe4b01190df3c4a0a
+该脚本能够帮你从多个站点采集到高匿名的代理列表，并进行验证。
 
-用法
+用法，可选择NodeJS或者Docker
 
-首先设置本地能够翻墙的socks5 proxy，代码中默认为localhost:7070，请根据自己的需要修改
-如果你是能翻墙的http proxy，则请修改代码为
-
-```
-function getUrl(url) {
-    return {
-        url: url,
-        proxy: "http://xxxxxx"
-    }
-}
-```
-
-然后
+NodeJS
+======
 ```
 npm install
-node fetch.js
-node proxycheck.js
+node app.js
 ```
+
+Docker
+======
+```
+docker pull derekhe/anonymous-proxy
+docker run -p 9090:9090 derekhe/anonymous-proxy
+```
+
+API
+===
+
+* 得到代理列表
+  GET http://localhost:9090/proxy
+
+* 得到验证过的代理列表
+  GET http://localhost:9090/proxy/valid
+
+* 刷新列表
+  POST http://localhost:9090/refresh
