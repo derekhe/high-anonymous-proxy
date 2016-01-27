@@ -13,11 +13,11 @@ require("babel-core").transform("code");
     function getUrl(url) {
         return {
             url: url,
-            agentClass: Agent,
-            agentOptions: {
-                socksHost: 'localhost',
-                socksPort: 7070
-            },
+            //agentClass: Agent,
+            //agentOptions: {
+            //    socksHost: 'localhost',
+            //    socksPort: 7070
+            //},
             timeout: 20 * 1000
         }
     }
