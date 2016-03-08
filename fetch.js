@@ -1,23 +1,31 @@
-/**
- * Created by sche on 10/19/15.
- */
 var Agent = require('socks5-http-client/lib/Agent');
 var request = require('request');
 var async = require('async');
 var fs = require('fs-extra');
-
+var argv = require('minimist')(process.argv.slice(2));
 var proxy = [];
+var _ = require("lodash");
 
-function getUrl(url) {
-    return {
+var socks;
+if (argv["socks"]) {
+    socks = argv["socks"].split(":");
+}
+
+function getOptions(url) {
+    var opt = {
         url: url,
-        agentClass: Agent,
-        agentOptions: {
-            socksHost: 'localhost',
-            socksPort: 7070
-        },
         timeout: 20 * 1000
+    };
+
+    if (socks) {
+        opt.agentClass = Agent;
+        opt.agentOptions = {
+            socksHost: socks[0],
+            socksPort: socks[1]
+        }
     }
+
+    return opt;
 }
 
 function finish(callback, args) {
@@ -29,7 +37,7 @@ function finish(callback, args) {
 
 function proxy_com_ru(callback) {
     var url = "http://www.proxy.com.ru/gaoni/";
-    request(getUrl(url)
+    request(getOptions(url)
         , function (err, res, body) {
             var re = /<td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td>/g;
 
@@ -43,7 +51,7 @@ function proxy_com_ru(callback) {
 
 function cn_proxy(callback) {
     var url = "http://cn-proxy.com/";
-    request(getUrl(url)
+    request(getOptions(url)
         , function (err, res, body) {
             var re = /(\d+\.\d+.\d+.\d+)<\/td>\s*<td>(\d+)<\/td>/g;
 
@@ -57,7 +65,7 @@ function cn_proxy(callback) {
 
 function getproxy_ip(callback, args) {
     var url = "http://www.getproxy.jp/china" + args;
-    request(getUrl(url)
+    request(getOptions(url)
         , function (err, res, body) {
             var re = /(\d+\.\d+.\d+.\d+\:\d+)/g;
 
@@ -80,9 +88,10 @@ function regexMatch(re, body, func) {
         func(m);
     }
 }
+
 function kuai_daili(callback, args) {
     var url = "http://www.kuaidaili.com/proxylist/" + args + "/";
-    request(getUrl(url)
+    request(getOptions(url)
         , function (err, res, body) {
             var re = /<td>(\d+\.\d+\.\d+\.\d+)<\/td>\s*<td>(\d+)<\/td>/gm;
             regexMatch(re, body, function (m) {
@@ -95,7 +104,7 @@ function kuai_daili(callback, args) {
 
 function pachong_org(callback) {
     var url = "http://pachong.org/area/short/name/cn/type/high.html";
-    request(getUrl(url)
+    request(getOptions(url)
         , function (err, res, body) {
             var scriptRe = /<script type="text\/javascript">(.*?)<\/script>/gm;
             var script;
@@ -116,7 +125,7 @@ function pachong_org(callback) {
 
 function gatherproxy(callback, args) {
     var url = "http://www.gatherproxy.com/proxylist/country/";
-    var options = getUrl(url);
+    var options = getOptions(url);
     options.method = "POST";
     options.form = {
         "Filter": "elite",
@@ -140,7 +149,6 @@ var q = async.queue(function (task, callback) {
     task.f(callback, task.args);
 }, 30);
 
-var tasks = [];
 var tasks = [{f: proxy_com_ru}, {f: pachong_org}, {f: cn_proxy}];
 
 for (var page = 1; page <= 5; page++) {
@@ -160,8 +168,11 @@ q.push(tasks, function (url) {
 });
 
 q.drain = function () {
-    console.log(proxy);
-    console.log(proxy.length);
-    fs.ensureDirSync("./out");
-    fs.writeFileSync("./out/proxy.json", JSON.stringify(proxy, null, 2));
+    if (argv["file"]) {
+        fs.writeFileSync(argv["file"], JSON.stringify(proxy, null, 2))
+    } else {
+        _.each(proxy, function (p) {
+            console.log(p);
+        });
+    }
 };
